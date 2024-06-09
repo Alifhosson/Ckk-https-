@@ -6,7 +6,7 @@
   "language": "en",
   "notification": false,
   "approval": false,
-  "saveState": false,
+  "saveState": true,
   "BOTNAME": "Alif-bot...😋😚",
   "PREFIX": "/",
   "OPERATOR": [
