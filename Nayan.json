@@ -5,7 +5,7 @@
   "developermode": false,
   "language": "en",
   "notification": false,
-  "approval": false,
+  "approval": true,
   "saveState": true,
   "BOTNAME": "Alif-bot...😋😚",
   "PREFIX": "/",
@@ -18,7 +18,7 @@
     "100084558875047"
   ],
   "OWNER": ["100000959749712"], 
-  "APPROVED": [],
+  "APPROVED": [100075421394195],
   "disabledcmds": [],
   "disabledevents": [],
   "note": "make sure that the bot name you entered is all lowercase",
