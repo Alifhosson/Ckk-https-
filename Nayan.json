@@ -3,7 +3,7 @@
   "autoRestart": true,
   "accpetPending": false,
   "developermode": false,
-  "language": "en",
+  "language": "en", 
   "notification": false,
   "approval": false,
   "saveState": false,
