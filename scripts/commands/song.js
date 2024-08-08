@@ -1,4 +1,4 @@
-// Fixed by Mohammad Nayan. Dont Change Credit
+// Fix by Mohammad Nayan. Dont Change Credit
 
 
 const fs = require('fs');
@@ -13,7 +13,8 @@ async function downloadMusicFromYoutube(link, path) {
 
   try {
     const data = await nayan.ytdown(link);
-    const audioUrl = data.data.audio;
+    console.log(data)
+    const audioUrl = data.data.video;
 
     return new Promise((resolve, reject) => {
       axios({
