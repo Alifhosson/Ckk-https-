@@ -39,15 +39,19 @@ module.exports.run = async function({ api, event, args, Users, threadID }) {
       });
       const baseImage = await jimp.read(baseImageBuffer);
 
+      // Example: Replace these with actual URLs or methods to get the profile pictures
+      const profilePicUrl1 = `https://somewhere.com/profiles/${id1}.jpeg`; // Replace with actual method to get profile picture
+      const profilePicUrl2 = `https://somewhere.com/profiles/${id2}.jpeg`; // Replace with actual method to get profile picture
+
       // Fetch and load profile pictures
       const [profilePic1, profilePic2] = await Promise.all([
-        api.getUserProfilePicture(id1),
-        api.getUserProfilePicture(id2)
+        axios.get(profilePicUrl1, { responseType: 'arraybuffer' }),
+        axios.get(profilePicUrl2, { responseType: 'arraybuffer' })
       ]);
 
       const [profileImage1, profileImage2] = await Promise.all([
-        jimp.read(profilePic1),
-        jimp.read(profilePic2)
+        jimp.read(profilePic1.data),
+        jimp.read(profilePic2.data)
       ]);
 
       // Resize profile pictures (if needed) and place them on the base image
