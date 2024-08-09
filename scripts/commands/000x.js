@@ -21,27 +21,45 @@ module.exports.run = async function({ api, event, args, Users, threadID }) {
   if (!info) {
     return api.sendMessage(`${nn}, Please Tag Your 2 Friends`, threadID);
   } else {
-    const id = Object.keys(event.mentions)[0] || uid;
-    const ids = Object.keys(event.mentions)[1] || uid;
+    const ids = Object.keys(event.mentions);
+    if (ids.length < 2) {
+      return api.sendMessage(`${nn}, You need to tag 2 friends.`, threadID);
+    }
 
-    const name = await Users.getNameUser(id);
-    const name2 = await Users.getNameUser(uid);
-    const name3 = await Users.getNameUser(ids);
+    const [id1, id2] = ids;
+    const [name1, name2] = await Promise.all([
+      Users.getNameUser(id1),
+      Users.getNameUser(id2)
+    ]);
 
     try {
-      // Fetch the image from the URL
-      const { data: imageBuffer } = await axios.get('https://i.imgur.com/fJn1yAh.jpeg', {
+      // Fetch the base image
+      const { data: baseImageBuffer } = await axios.get('https://i.imgur.com/fJn1yAh.jpeg', {
         responseType: 'arraybuffer',
       });
+      const baseImage = await jimp.read(baseImageBuffer);
 
-      // Load the image with jimp
-      const image = await jimp.read(imageBuffer);
+      // Fetch and load profile pictures
+      const [profilePic1, profilePic2] = await Promise.all([
+        api.getUserProfilePicture(id1),
+        api.getUserProfilePicture(id2)
+      ]);
 
-      // Perform image manipulations here if needed (e.g., overlay user photos)
-      
-      // Save or process the image
+      const [profileImage1, profileImage2] = await Promise.all([
+        jimp.read(profilePic1),
+        jimp.read(profilePic2)
+      ]);
+
+      // Resize profile pictures (if needed) and place them on the base image
+      profileImage1.resize(100, 100);
+      profileImage2.resize(100, 100);
+
+      baseImage.composite(profileImage1, 50, 50);  // Position (50, 50) for the first user
+      baseImage.composite(profileImage2, 200, 50); // Position (200, 50) for the second user
+
+      // Save the final image
       const outputFilePath = `${__dirname}/output/friends_frame_${uid}.jpeg`;
-      await image.writeAsync(outputFilePath);
+      await baseImage.writeAsync(outputFilePath);
 
       // Send the image back to the user
       return api.sendMessage(
