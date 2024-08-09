@@ -49,7 +49,7 @@ module.exports.run = async function({ api, event, args, Users, threadID }) {
       jimp.read(pic1),
       jimp.read(pic2),
       jimp.read(pic3),
-      jimp.read('path_to_your_frame_image.png')
+      jimp.read('https://i.imgur.com/fJn1yAh.jpeg')
     ]);
 
     // Resize images to fit within the frame (example sizes)
