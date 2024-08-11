@@ -16,7 +16,7 @@ module.exports.run = async function({ api, event, args }) {
     let tid = threadID;
     let mid = messageID;
 
-    // Check if user provided any message to ask
+    // Check if the user provided any message to ask
     if (!args[0]) {
         return api.sendMessage("hmm Jan Umma 😚🌚 ...", tid, mid);
     }
@@ -24,24 +24,20 @@ module.exports.run = async function({ api, event, args }) {
     const content = encodeURIComponent(args.join(" "));
 
     try {
-        // Make sure the API URL is correct
+        // Correct API URL
         const res = await axios.get(`http://37.27.114.136:25472/sim?type=ask&ask=${content}&lang=bn&filter=false`);
         const responseText = res.data.success;
 
+        // Handle API errors
         if (res.data.error) {
-            // Handle API errors
-            api.sendMessage(`Error: ${res.data.error}`, tid, (error) => {
-                if (error) {
-                    console.error(error);
-                }
-            }, mid);
+            return api.sendMessage(`Error: ${res.data.error}`, tid, mid);
+        }
+
+        // Ensure responseText is defined before sending it
+        if (responseText) {
+            api.sendMessage(responseText, tid, mid);
         } else {
-            // Send the response back to the user
-            api.sendMessage(responseText, tid, (error) => {
-                if (error) {
-                    console.error(error);
-                }
-            }, mid);
+            api.sendMessage("No response received from the server.", tid, mid);
         }
     } catch (error) {
         // Handle any errors during the HTTP request
