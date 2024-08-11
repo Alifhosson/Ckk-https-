@@ -12,29 +12,23 @@ module.exports.config = {
 
 module.exports.run = async function({ api, event, args }) {
     const axios = require("axios");
-    let { messageID, threadID, senderID, body } = event;
-    let tid = threadID,
-    mid = messageID;
+    let { messageID, threadID } = event;
+
+    if (!args[0]) return api.sendMessage("hmm Jan Umma 😚🌚 ...", threadID, messageID);
+
     const content = encodeURIComponent(args.join(" "));
-    if (!args[0]) return api.sendMessage("hmm Jan Umma 😚🌚 ...", tid, mid);
+    
     try {
         const res = await axios.get(`http://37.27.114.136:25472/sim?type=ask&ask=bn&message=${content}&filter=false`);
-        const respond = res.data.success;
+        
         if (res.data.error) {
-            api.sendMessage(`Error: ${res.data.error}`, tid, (error, info) => {
-                if (error) {
-                    console.error(error);
-                }
-            }, mid);
-        } else {
-            api.sendMessage(respond, tid, (error, info) => {
-                if (error) {
-                    console.error(error);
-                }
-            }, mid);
+            return api.sendMessage(`Error: ${res.data.error}`, threadID, messageID);
         }
+
+        const respond = res.data.success;
+        api.sendMessage(respond, threadID, messageID);
     } catch (error) {
         console.error(error);
-        api.sendMessage("An error occurred while fetching the data.", tid, mid);
+        api.sendMessage("An error occurred while fetching the data.", threadID, messageID);
     }
 };
