@@ -1,6 +1,6 @@
 {  
   "author": "Nayan",
-  "autoRestart": true,
+  "autoRestart": false,
   "accpetPending": false,
   "developermode": false,
   "language": "en", 
